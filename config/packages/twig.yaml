@@ -1,0 +1,9 @@
+twig:
+  file_name_pattern: '*.twig'
+  default_path: '%kernel.project_dir%/src/Infrastructure/Symfony/View'
+  paths:
+    '%kernel.project_dir%/src/Infrastructure/Symfony/View': null
+
+when@test:
+  twig:
+    strict_variables: true

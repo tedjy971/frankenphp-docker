@@ -1,0 +1,40 @@
+deptrac:
+  paths:
+    - ./src
+  exclude_files:
+    - '#.*test.*#'
+  layers:
+    - name: UseCase
+      collectors:
+        - type: classLike
+          value: Application\\UseCase\\.*
+    - name: DTO
+      collectors:
+        - type: classLike
+          value: Application\\DTO\\.*
+    - name: Service
+      collectors:
+        - type: classLike
+          value: Domain\\Service\\.*
+    - name: Model
+      collectors:
+        - type: classLike
+          value: Domain\\Model\\.*
+    - name: Repository
+      collectors:
+        - type: classLike
+          value: Domain\\Repository\\.*
+  
+  ruleset:
+    Model: ~
+    Repository: 
+      - Model
+    Service: 
+      - Model
+      - Repository
+      - DTO
+    UseCase:
+      - Repository
+      - Service
+      - DTO
+      - Model

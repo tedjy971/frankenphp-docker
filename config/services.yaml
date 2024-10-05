@@ -1,0 +1,50 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+#    env(MONGODB_URL): 'mongodb://mongo'
+#    env(MONGODB_DB): 'symfony'
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    Domain\:
+        resource: '../src/Domain/'
+        exclude:
+            - '../src/Domain/Model/'
+    
+    Infrastructure\:
+        resource: '../src/Infrastructure/'
+        exclude:
+            - '../src/Infrastructure/Symfony/Kernel.php'
+    
+    Application\:
+        resource: '../src/Application/'
+        
+    #####Injection de dépendances Inverse#####
+    Domain\Repository\UserRepositoryInterface: '@Infrastructure\Symfony\Repository\Firestore\UserRepository'
+    Domain\Repository\MailerInterface : '@Infrastructure\Symfony\Service\MailerService'
+    Domain\Repository\ImportUserInterface : '@Infrastructure\Symfony\Service\Import\CsvImportUserService'
+    ##### Fin Injection de dépendances#####
+    
+    # Déclaration du service CsvUserRepository
+    Infrastructure\Symfony\Repository\Csv\CsvUserRepository:
+        arguments:
+            $filePath: '%kernel.project_dir%/db/users.csv'  # Spécifier le chemin du fichier CSV
+    # Déclaration du service XmlImportUserService    
+    Infrastructure\Symfony\Service\Import\XmlImportUserService:
+      arguments:
+        $filePath: '%kernel.project_dir%/var/source/users_random.xml'  # Déclaration du service XmlImportUserService    
+    Infrastructure\Symfony\Service\Import\CsvImportUserService:
+      arguments:
+        $filePath: '%kernel.project_dir%/var/source/users_random.csv'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
