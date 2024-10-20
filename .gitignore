@@ -12,3 +12,9 @@
 ###> qossmic/deptrac ###
 /.deptrac.cache
 ###< qossmic/deptrac ###
+
+### vscode
+.vscode/
+### vscode
+### idea
+.idea/

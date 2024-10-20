@@ -1,4 +1,0 @@
-kreait_firebase:
-  projects:
-    default:
-      credentials: '%kernel.project_dir%/config/kernix-demo.json'

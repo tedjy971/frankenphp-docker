@@ -1,0 +1,85 @@
+{# in src/MyCompany/MyBundle/Resources/views/Vehicle/createVehicle.html.twig #}
+<div>
+    Steps:
+    {% include '@CraueFormFlow/FormFlow/stepList.html.twig' %}
+</div>
+
+{{ form_start(form) }}
+    {{ form_errors(form) }}
+
+    {{ dump(form) }}
+
+    {% if form.educations.vars.prototype is defined %}
+        <ul class="educations" data-prototype="{{ form_widget(form.educations.vars.prototype)|e('html_attr') }}">
+            {% for educationForm in form.educations %}
+                <li>
+                    {{ form_widget(educationForm) }}
+                </li>
+            {% endfor %}
+        </ul>
+        <button type="button" class="add_item_link" data-collection-holder="educations">Ajouter une éducation</button>
+    {% endif %}
+
+    {% if form.experiences.vars.prototype is defined %}
+        <ul class="experiences" data-prototype="{{ form_widget(form.experiences.vars.prototype)|e('html_attr') }}">
+            {% for experienceForm in form.experiences %}
+                <li>
+                    {{ form_widget(experienceForm) }}
+                </li>
+            {% endfor %}
+        </ul>
+        <button type="button" class="add_item_link" data-collection-holder="experiences">Ajouter une expérience</button>
+    {% endif %}
+{% if form.skills.vars.prototype is defined %}
+    <ul class="skills" data-prototype="{{ form_widget(form.skills.vars.prototype)|e('html_attr') }}">
+        {% for skillForm in form.skills %}
+            <li>
+                {{ form_widget(skillForm) }}
+            </li>
+        {% endfor %}
+    </ul>
+    <button type="button" class="add_item_link" data-collection-holder="skills">Ajouter une compétence</button>
+{% endif %}
+
+
+
+{{ form_rest(form) }}
+{% include '@CraueFormFlow/FormFlow/buttons.html.twig' %}
+{{ form_end(form) }}
+
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Lorsqu'on clique sur un bouton avec la classe 'add_item_link'
+            $('.add_item_link').on('click', function(e) {
+                e.preventDefault();
+
+                // On récupère la collection cible via l'attribut data-collection-holder
+                const collectionHolderClass = $(this).data('collection-holder');
+                const $collectionHolder = $(`ul.${collectionHolderClass}`);
+
+                // On ajoute l'index actuel de la collection pour les nouveaux formulaires
+                $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+                addForm($collectionHolder, $(this));
+            });
+
+            // Fonction générique pour ajouter un formulaire
+            function addForm($collectionHolder, $button) {
+                const prototype = $collectionHolder.data('prototype');
+                const index = $collectionHolder.data('index');
+
+                // Remplacer __name__ dans le prototype par l'index actuel
+                const newForm = prototype.replace(/__name__/g, index);
+
+                // Augmenter l'index pour la prochaine insertion
+                $collectionHolder.data('index', index + 1);
+
+                // Ajouter le nouveau formulaire avant le bouton
+                const $newFormLi = $('<li></li>').append(newForm);
+                $button.before($newFormLi);
+            }
+        });
+    </script>
+{% endblock %}

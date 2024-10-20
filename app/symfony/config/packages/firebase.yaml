@@ -1,0 +1,4 @@
+kreait_firebase:
+  projects:
+    default:
+      credentials: '%kernel.project_dir%/config/kernix-demo-cleanarchi-firebase-adminsdk-ck2yt-6fc8a601f6.json'

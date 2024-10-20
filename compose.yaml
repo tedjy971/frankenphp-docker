@@ -3,18 +3,18 @@ services:
     image: ${IMAGES_PREFIX:-}app-php
     restart: unless-stopped
     environment:
-      SERVER_NAME: ${SERVER_NAME:-localhost}, php:80
+      SERVER_NAME: ${SERVER_NAME:-localhost}
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
-      # Run "composer require symfony/orm-pack" to install and configure Doctrine ORM
 #      DATABASE_URL: postgresql://${POSTGRES_USER:-app}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-app}?serverVersion=${POSTGRES_VERSION:-15}&charset=${POSTGRES_CHARSET:-utf8}
       # Run "composer require symfony/mercure-bundle" to install and configure the Mercure integration
-      MERCURE_URL: ${CADDY_MERCURE_URL:-http://php/.well-known/mercure}
-      MERCURE_PUBLIC_URL: ${CADDY_MERCURE_PUBLIC_URL:-https://$${SERVER_NAME:-localhost}/.well-known/mercure}
+      MERCURE_URL: ${CADDY_MERCURE_URL}
+      MERCURE_PUBLIC_URL: ${CADDY_MERCURE_PUBLIC_URL}
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
-      # The two next lines can be removed after initial installation
-      SYMFONY_VERSION: ${SYMFONY_VERSION:-}
-      STABILITY: ${STABILITY:-stable}
+      MONGODB_DB: ${MONGODB_DB:-app}
+      MONGODB_USER: ${MONGODB_USER:-app}
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD:-!ChangeMe!}
+
     volumes:
       - caddy_data:/data
       - caddy_config:/config
@@ -37,8 +37,8 @@ services:
     ports:
       - 27017:27017
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-app}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-!ChangeMe!}
     volumes:
       - mongo_data:/data/db
 
@@ -55,18 +55,10 @@ services:
       ME_CONFIG_BASICAUTH: false
     depends_on:
       - mongo
-###> mailer 
-#  mailhog:
-#    image: mailhog/mailhog:latest
-#    restart: always
-#    ports:
-#      - 1025:1025
-#      - 8025:8025
+
 volumes:
   caddy_data:
   caddy_config:
 
-###> doctrine/doctrine-bundle ###
   database_data:
-###< doctrine/doctrine-bundle ###
   mongo_data:

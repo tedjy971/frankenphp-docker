@@ -1,0 +1,6 @@
+.deptrac.cache
+vendor/
+var/
+###> bref/symfony-bridge ###
+/.serverless/
+###< bref/symfony-bridge ###
