@@ -48,7 +48,7 @@ RUN install-php-extensions \
 #    pdo_mysql \
     pdo_sqlite \
     mongodb \
-    grpc \
+#    grpc \
 ;
 ###< doctrine/doctrine-bundle ###
 ###< recipes ###
